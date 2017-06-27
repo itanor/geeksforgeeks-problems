@@ -6,7 +6,9 @@ function assertEqualArrays(array1, array2, desc) {
 }
 
 Array.prototype.removeDuplicates = function() {
-  for(var i = 0, len = this.length; i < len; i++) this.remove(i);
+  for(var i = 0, len = this.length; i < len; i++) {
+    this[i] != undefined && this.remove(i);
+  }
   return this.filter(function(n) {return n;});
 }
 Array.prototype.remove = function(index) {
