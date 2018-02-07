@@ -1,32 +1,46 @@
-function assertEqualArrays(array1, array2, desc) {
-  var value = array1.length == array2.length && array1.every(function(n, i) {return n === array2[i]});
+// Given an array of integers which may or may not contain duplicate elements. 
+// Your task is to print the array after removing duplicate elements, if present.
 
-  value ? console.log(`%c ${desc} PASS!`, 'color: green') 
-        : console.log(`%c ${desc} FAIL!`, 'color: red');
+function assert(value, desc) {
+    value ? console.log(`%c ${desc} PASS!`, 'color: green')
+          : console.log(`%c ${desc} FAIL!`, 'color: red');
 }
 
 Array.prototype.removeDuplicates = function() {
+  var newArray = [], pivot, next = 1;
   for(var i = 0, len = this.length; i < len; i++) {
-    this[i] != undefined && this.remove(i);
+    pivot = this[i];
+
+    if(pivot == null) {
+      next++;
+      continue;
+    }
+    for(var j = next; j < len; j++) {
+      if(pivot == this[j]) {
+        this[j] = null;
+      }
+    }
+    next++;
   }
-  return this.filter(function(n) {return n;});
+  return this;
 }
-Array.prototype.remove = function(index) {
-  for(var i = index, len = this.length; i < len; i++) {
-    if(this[index] == this[i+1] && i+1 < len) this[i+1] = undefined;
+Array.prototype.newArray = function() {
+  var newArray = [];
+  for(var i = 0; i < this.length; i++) {
+    if(this[i] != null) newArray.push(this[i]);
   }
+  return newArray;
 }
 
-function removeDuplicatesFromUnsortedArray(array) {
-  return array.removeDuplicates();
+function remove(array) {
+  return array
+         .removeDuplicates()
+         .newArray();
 }
 
-assertEqualArrays(removeDuplicatesFromUnsortedArray([1, 2, 3, 1, 4, 2]), [1, 2, 3, 4], "");
-assertEqualArrays(removeDuplicatesFromUnsortedArray([1, 2, 1, 3, 6, 9]), [1, 2, 3, 6, 9], "");
-assertEqualArrays(removeDuplicatesFromUnsortedArray([2, 2, 3, 4, 5, 4]), [2, 3, 4, 5], "");
-assertEqualArrays(removeDuplicatesFromUnsortedArray([8, 3, 5, 1, 1, 3, 9]), [8, 3, 5, 1, 9], "");
-assertEqualArrays(removeDuplicatesFromUnsortedArray([89]), [89], "");
-assertEqualArrays(removeDuplicatesFromUnsortedArray([5, 5, 1, 9, 5]), [5, 1, 9], "");
-assertEqualArrays(removeDuplicatesFromUnsortedArray([11, 9, 11]), [11, 9], "");
-assertEqualArrays(removeDuplicatesFromUnsortedArray([]), [], "");
+assert(remove([]).length == 0, "");
+assert(remove([1,1,2,3,2]).length == 3, "");
+assert(remove([2,1,1,2,3]).length == 3, "");
+assert(remove([1,0,2,3]).length == 4, "");
+assert(remove([1,1,2,3,2,1]).length == 3, "");
 
